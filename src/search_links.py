@@ -37,16 +37,16 @@ class SearchLinks:
             print('Error loading https://patents.google.com/advanced')
             sys.exit()
         time.sleep(3)
-        self.driver.find_element_by_id('searchInput').send_keys(search_terms)
+        self.driver.find_element('id','searchInput').send_keys(search_terms)
         time.sleep(3)
-        self.driver.find_element_by_id('searchButton').click()
+        self.driver.find_element('id','searchButton').click()
         time.sleep(3)
         # set Results/page to 100, so we can perform less "Next page"
         try:
             WebDriverWait(self.driver, 10).until(
                 ec.presence_of_element_located((By.XPATH, '//dropdown-menu[@label="Results / page"]')))
-            self.driver.find_element_by_xpath('//dropdown-menu[@label="Results / page"]').click()
-            self.driver.find_element_by_xpath('//dropdown-menu[@label="Results / page"]/'
+            self.driver.find_element('xpath','//dropdown-menu[@label="Results / page"]').click()
+            self.driver.find_element('xpath','//dropdown-menu[@label="Results / page"]/'
                                               'iron-dropdown/div/div/div/div[4]').click()
         except:
             print('Error selecting 100 results/page')
@@ -66,12 +66,12 @@ class SearchLinks:
         if not self.number_of_results:
             # \d+ means one or more digits
             self.number_of_results = int(
-                re.search('\\b\\d+\\b', self.driver.find_element_by_id('numResultsLabel').text).group())
-        link_elements = self.driver.find_elements_by_xpath(
+                re.search('\\b\\d+\\b', self.driver.find_element('id','numResultsLabel').text).group())
+        link_elements = self.driver.find_elements('xpath',
             '//search-result-item//article//h4[@class="metadata style-scope search-result-item"]//'
             'span[@class="bullet-before style-scope search-result-item"]//'
             'span[@class="style-scope search-result-item"]')
-        title_elements = self.driver.find_elements_by_xpath(
+        title_elements = self.driver.find_elements('xpath',
             '//search-result-item//article//state-modifier//a//h3//span')
         self.links.extend([e.text for e in link_elements if e.text is not ''])
         self.titles.extend([e.text for e in title_elements if e.text is not ''])
@@ -83,7 +83,7 @@ class SearchLinks:
             try:
                 WebDriverWait(self.driver, 10).until(
                     ec.presence_of_element_located((By.XPATH, '//iron-icon[@id="icon"]')))
-                next_btn = self.driver.find_elements_by_xpath('//iron-icon[@id="icon"]')[1]
+                next_btn = self.driver.find_elements('xpath','//iron-icon[@id="icon"]')[1]
                 if next_btn.is_displayed():
                     next_btn.click()
                 else:

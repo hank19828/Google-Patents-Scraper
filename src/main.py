@@ -75,15 +75,19 @@ class GooglePatentsScraper(QDialog):
 
     def print_search_result(self):
         s = ''
+        t = []
         s += '<style type="text/css">a{text-decoration: none; cursor: pointer;}</style>'
         # remember to set font of TextBrowser to "Monospaced Font" (I choose Monaco)
         for index, (number, title) in enumerate(zip(self.numbers, self.titles), start=1):
             link = f'https://patents.google.com/patent/{number}/en'
             a = f'{f"({index})":<4}{number:<12} : {title}'
             s += f'<a href="{link}">{a.replace(" ", "&nbsp;")}</a><br>'
-
+            t.append(link)
+            print(link)
+        
         self.searchresultBrowser.setHtml(s)
         self.aboutLabel.setText(f'(About {len(self.numbers)} results)')
+        print(t)
 
     @pyqtSlot()
     def on_openfolderButton_clicked(self):
